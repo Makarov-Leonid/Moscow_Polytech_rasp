@@ -62,12 +62,18 @@ def write_data(data):
 
 def read_data():
     connect = connection_db()
-    sql = 'SELECT * FROM rasp WHERE'
+    sql =   '''
+                SELECT day, time_, auditories, group_ FROM rasp
+                WHERE teacher=%s
+            '''
+    finding_teacher = 'Никишина Ирина Николаевна'
     try:
         cursor = connect.cursor()
-
+        cursor.execute(sql,finding_teacher)
+        for row in cursor:
+            print(row)
     finally:
-        connect.slose()
+        connect.close()
 
 
 def structure_data():
@@ -76,7 +82,6 @@ def structure_data():
         grup_title = grup["group"]['title']
         grid = grup["grid"]
         # elem день недели, value расписание на этот день
-        # TODO: проверить всегда ли расписание лежит в value[0]
         for elem, value in grid.items():
             day = elem
             for time_l, param in value.items():
@@ -101,10 +106,9 @@ def structure_data():
                             'auditories':auditories,
                          }
                 write_data(result)
-                # print([v for v in result.values()])
 
 def main():
-    print(structure_data())
+    read_data()
 
 if __name__ == '__main__':
     main()
