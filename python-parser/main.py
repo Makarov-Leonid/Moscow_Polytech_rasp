@@ -33,15 +33,16 @@ def write_data(data):
     # 'date_from'
     # 'date_to'
     # 'auditories'
+    # 'group'
     # -----------------
     connect = connection_db()
-    sql ="INSERT INTO rasp(day,time_,teacher,subject,date_from,date_to,auditories) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+    sql ="INSERT INTO rasp(day,time_,teacher,subject,date_from,date_to,auditories,group_) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
     info = (data['day'],data['time'],data['teacher'],
-            data['subject'],data['date_from'],data['date_to'],data['auditories'])
+            data['subject'],data['date_from'],data['date_to'],
+            data['auditories'],data['group'])
     try:
         cursor = connect.cursor()
         cursor.execute(sql,info)
-        print('subject')
         connect.commit()
     finally:
         connect.close()
@@ -55,8 +56,18 @@ def write_data(data):
 #   subject CHAR(255) NOT NULL,
 #   date_from DATE NOT NULL,
 #   date_to DATE NOT NULL,
-#   auditories CHAR(255) NOT NULL
+#   auditories CHAR(255) NOT NULL,
+#   group_ CHAR(255) NOT NULL
 # ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+def read_data():
+    connect = connection_db()
+    sql = 'SELECT * FROM rasp WHERE'
+    try:
+        cursor = connect.cursor()
+
+    finally:
+        connect.slose()
 
 
 def structure_data():
@@ -80,6 +91,7 @@ def structure_data():
                 auditories  = param["auditories"][0]["title"]
                 #наверно, это можно сделать по другому
                 result = {
+                            'group':grup_title,
                             'day':day,
                             'time':time,
                             'teacher':teacher,
