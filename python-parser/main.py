@@ -61,6 +61,7 @@ def write_data(data):
 # ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 def read_data():
+    # TODO: Добавить проверку модуля
     connect = connection_db()
     sql =   '''
                 SELECT day, time_, auditories, group_ FROM rasp
