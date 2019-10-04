@@ -45,19 +45,6 @@ def write_data(data):
     finally:
         connect.close()
 
-# TODO: Убрать\вынести в отдельный файл
-#пусть пока полежит здесь
-CREATE TABLE rasp(
-  day INT NOT NULL,
-  time_ INT NOT NULL,
-  teacher CHAR(255) NOT NULL,
-  subject CHAR(255) NOT NULL,
-  date_from DATE NOT NULL,
-  date_to DATE NOT NULL,
-  auditories CHAR(255) NOT NULL,
-  group_ CHAR(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 def read_data():
     connect = connection_db()
     sql =   '''

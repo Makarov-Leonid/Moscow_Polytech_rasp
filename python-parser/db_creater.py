@@ -3,6 +3,7 @@
 import pymysql
 from pymysql import Error
 
+# TODO: вынести настройки mysql в отдельный файл
 def connection_mySQL():
     connection = pymysql.connect(host='localhost',
                                  user='root',
