@@ -60,17 +60,27 @@ def write_data(data):
 #   group_ CHAR(255) NOT NULL
 # ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+#CUREDATE() >= rasp.date_from AND CUREDATE() <= rasp.date_to AND
+
+# '''
+#             SELECT day, time_, auditories, group_ FROM rasp
+#             WHERE
+#             teacher=%s
+#
+#         '''
+
 def read_data():
-    # TODO: Добавить проверку модуля
     connect = connection_db()
     sql =   '''
                 SELECT day, time_, auditories, group_ FROM rasp
-                WHERE teacher=%s
+                WHERE NOW() >= date_from AND NOW() <= date_to AND
+                teacher=%s
+                ORDER BY day, time_
             '''
     finding_teacher = 'Никишина Ирина Николаевна'
     try:
         cursor = connect.cursor()
-        cursor.execute(sql,finding_teacher)
+        cursor.execute(sql, finding_teacher) #finding_teacher
         for row in cursor:
             print(row)
     finally:
