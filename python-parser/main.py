@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
-from contextlib import closing
 import pymysql
 from pymysql.cursors import DictCursor
 #-------
@@ -59,15 +58,6 @@ def write_data(data):
 #   auditories CHAR(255) NOT NULL,
 #   group_ CHAR(255) NOT NULL
 # ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-#CUREDATE() >= rasp.date_from AND CUREDATE() <= rasp.date_to AND
-
-# '''
-#             SELECT day, time_, auditories, group_ FROM rasp
-#             WHERE
-#             teacher=%s
-#
-#         '''
 
 def read_data():
     connect = connection_db()

@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from contextlib import closing
 import pymysql
 from pymysql import Error
 
