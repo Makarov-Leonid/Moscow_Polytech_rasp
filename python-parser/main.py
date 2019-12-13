@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import pymysql
-from pymysql.cursors import DictCursor
-#-------
-# TODO: Добавить requirements.txt
+import datetime
 
 def get_data():
     with open("stu_mami.json","r", encoding="utf8") as reader:
@@ -11,59 +8,7 @@ def get_data():
         rasp = data['contents']
     return rasp
 
-def connection_db():
-
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='qaz',
-                                 db='schedule',
-                                 charset='utf8',
-                                 cursorclass=DictCursor)
-    return connection
-
-def write_data(data):
-    # input data keys
-    # -----------------
-    # 'day'
-    # 'time'
-    # 'teacher'
-    # 'subject'
-    # 'date_from'
-    # 'date_to'
-    # 'auditories'
-    # 'group'
-    # -----------------
-    connect = connection_db()
-    sql ="INSERT INTO rasp(day,time_,teacher,subject,date_from,date_to,auditories,group_) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
-    info = (data['day'],data['time'],data['teacher'],
-            data['subject'],data['date_from'],data['date_to'],
-            data['auditories'],data['group'])
-    try:
-        cursor = connect.cursor()
-        cursor.execute(sql,info)
-        connect.commit()
-    finally:
-        connect.close()
-
 def read_data():
-    connect = connection_db()
-    sql =   '''
-                SELECT day, time_, auditories, group_ FROM rasp
-                WHERE NOW() >= date_from AND NOW() <= date_to AND
-                teacher=%s
-                ORDER BY day, time_
-            '''
-    finding_teacher = 'Никишина Ирина Николаевна'
-    try:
-        cursor = connect.cursor()
-        cursor.execute(sql, finding_teacher) #finding_teacher
-        for row in cursor:
-            print(row)
-    finally:
-        connect.close()
-
-
-def structure_data():
     rasp = get_data()
     for grup in rasp:
         grup_title = grup["group"]['title']
@@ -92,10 +37,21 @@ def structure_data():
                             'date_to':date_to,
                             'auditories':auditories,
                          }
-                write_data(result)
+                yield result
+
+def print_data(result, teacher):
+    day = {'1':'Понедельник', '2':'Вторник', '3':'Среда', '4':'Четверг', '5':'Пятница', '6':'Суббота', '7':'Воскреcенье'}
+    time = {'1':'9:00 - 10:30', '2':'10:40 - 12:10', '3':'12:20 - 13:50', '4':'14:30 - 16:00', '5':'16:10 - 17:40', '6':'17:50 - 19:20', '7':'19:30 - 21:00'}
+    time_ = str(datetime.datetime.now())[:10]
+    for row in result:
+        if row['date_from'] <= time_ and row['date_to'] >= time_ and row['teacher'] == teacher:
+            print('{:11} {:13} {:10} {}'.format(day[row['day']], time[row['time']], row['auditories'], row['subject']))
+
 
 def main():
-    read_data()
+    teacher = 'Чувашев Юрий Иванович'
+    print(teacher)
+    print_data(read_data(), teacher)
 
 if __name__ == '__main__':
     main()
