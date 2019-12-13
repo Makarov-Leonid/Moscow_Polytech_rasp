@@ -48,8 +48,7 @@ def print_data(result, teacher):
             print('{:11} {:13} {:10} {}'.format(day[row['day']], time[row['time']], row['auditories'], row['subject']))
 
 
-def main():
-    teacher = 'Чувашев Юрий Иванович'
+def main(teacher = 'Чувашев Юрий Иванович'):
     print(teacher)
     print_data(read_data(), teacher)
 
