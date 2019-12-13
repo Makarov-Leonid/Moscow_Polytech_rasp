@@ -2,6 +2,8 @@
 import json
 import datetime
 
+from operator import itemgetter
+
 def get_data():
     with open("stu_mami.json","r", encoding="utf8") as reader:
         data = json.load(reader)
@@ -43,12 +45,16 @@ def print_data(result, teacher):
     day = {'1':'Понедельник', '2':'Вторник', '3':'Среда', '4':'Четверг', '5':'Пятница', '6':'Суббота', '7':'Воскреcенье'}
     time = {'1':'9:00 - 10:30', '2':'10:40 - 12:10', '3':'12:20 - 13:50', '4':'14:30 - 16:00', '5':'16:10 - 17:40', '6':'17:50 - 19:20', '7':'19:30 - 21:00'}
     time_ = str(datetime.datetime.now())[:10]
+    out_list = []
     for row in result:
-        if row['date_from'] <= time_ and row['date_to'] >= time_ and row['teacher'] == teacher:
-            print('{:11} {:13} {:10} {}'.format(day[row['day']], time[row['time']], row['auditories'], row['subject']))
+        if row['date_from'] <= time_ and row['date_to'] >= time_ and teacher in row['teacher']:
+            out_list.append([row['day'], row['time'], row['auditories'], row['subject']])
+    out_list = sorted(out_list, key = itemgetter(0,1))
+    for row in out_list:
+        print('{:11} {:13} {:10} {}'.format(str(day[row[0]]), str(time[row[1]]), str(row[2]), str(row[3])))
 
 
-def main(teacher = 'Чувашев Юрий Иванович'):
+def main(teacher = 'Карпов Александр Викторович'):
     print(teacher)
     print_data(read_data(), teacher)
 
