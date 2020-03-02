@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from datetime import datetime
 
 # Create your models here.
 
@@ -13,8 +14,8 @@ class group_rasp(models.Model):
     group_number = models.CharField(max_length=30)
     teacher = models.CharField(max_length=100, default='unknow')
     subject = models.CharField(max_length=100, default='unknow')
-    # date_from =
-    # date_to =
+    date_from = models.DateField(blank=True, default=datetime.now())
+    date_to = models.DateField(blank=True, default=datetime.now())
     auditories = models.CharField(max_length=10, default='unknow')
 
 
